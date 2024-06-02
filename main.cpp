@@ -1,64 +1,75 @@
-#include <iostream>
-#include <map>
-#include <string>
+#include "scaleswap.h"
+#include "menu_output.cpp"
+#include "conversion.cpp"
 
 using namespace std;
 
-//  Constant definition
-const double METER_TO_FOOT = 3.28084;
-const double FOOT_TO_METER = 0.3048;
-
-//  Converting from meters to foot
-double meters_to_foot(double meters) {
-    return meters * METER_TO_FOOT;
-}
-
-//  Converting from foot to meters
-double foot_to_meters(double foot) {
-    return foot * FOOT_TO_METER;
-}
-
 int main() {
-    //  Storing conversion options
-    map<int, string> ops = {
-        {1, "Meters to foot"},
-        {2, "Foot to meters"},
-        {3, "Exit"},
-    };
-
-    int op;
+    string unit_origin, unit_destiny;
     double value;
+    int index;
+    int finalindex;
 
-    cout << "Welcome to ScaleSwap, please choose a number" << endl;
+    while (true) {
+        welcomer();
+        cin >> index;
 
-    //  Menu
-    do {
-        cout << "Available options: " << endl;
-        for (const auto& entry : ops) {
-            cout << entry.first << ". " << entry.second << endl;
+        if (cin.fail() || index < 1 || index > 3) {
+            errorMessager();
+            continue;
         }
-        cout << "Choose an option: ";
-        cin >> op;
 
-        switch (op) {
-            case 1:
-                cout << "Meters input: ";
-                cin >> value;
-                cout << value << " meters equals to " << meters_to_foot(value) << " foot.";
-                break;
-            case 2:
-                cout << "Foot input: ";
-                cin >> value;
-                cout << value << " foot equals to " << foot_to_meters(value) << " meters.";
-                break;
-            case 3:
-                cout << "Exiting program. Goodbye!" << endl;
-                break;
-            default:
-                cout << "Incorrect option. Please, select a listed number." << endl;
+        if (index == 1) {
+            mt_selected();
+            display_units(metric_system);
+            unit_origin = getValidU(metric_system);
+            asker();
+            cin >> index;
+
+            if (cin.fail() || index < 1 || index > 2) {
+                errorMessager();
                 continue;
+            }
+
+            if (index == 1) {
+                display_units(metric_system);
+                unit_destiny = getValidU(metric_system);
+            } else if (index == 2) {
+                display_units(imperial_system);
+                unit_destiny = getValidU(imperial_system);
+            }
+        } else if (index == 2) {
+            in_selected();
+            display_units(imperial_system);
+            unit_origin = getValidU(imperial_system);
+            asker();
+            cin >> index;
+
+            if (cin.fail() || index < 1 || index > 2) {
+                errorMessager();
+                continue;
+            }
+
+            if (index == 1) {
+                display_units(metric_system);
+                unit_destiny = getValidU(metric_system);
+            } else if (index == 2) {
+                display_units(imperial_system);
+                unit_destiny = getValidU(imperial_system);
+            }
+        } else if (index == 3) {
+            cout << "Exiting the program." << endl;
+            break;
         }
-    } while (op != 3);
+
+        value = getValidV();
+
+        double value_con = calculate(value, unit_origin, unit_destiny);
+
+        if (value_con != -1) {
+            cout << value << " " << unit_origin << " is equal to " << value_con << " " << unit_destiny << "." << endl;
+        }
+    }
 
     return 0;
 }
