@@ -27,7 +27,7 @@ The project consists of the following files:
 ### Clone the Repository
 
 ```sh
-git clone https://github.com/YourUsername/ScaleSwap.git
+git clone https://github.com/Angcroft/ScaleSwap.git
 ```
 
 ### Navigate to the Project Directory
